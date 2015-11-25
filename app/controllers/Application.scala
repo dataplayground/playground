@@ -1,6 +1,6 @@
 package controllers
 
-import javax.inject.Inject
+import javax.inject.{Singleton, Inject}
 
 import actors.HelloActor
 import actors.HelloActor.SayHello
@@ -22,7 +22,7 @@ class Application @Inject()(system: ActorSystem) extends Controller {
 
   import scala.concurrent.duration._
 
-  implicit val timeout = 5.seconds
+  implicit val timeout = akka.util.Timeout(5.seconds)
 
   def sayHello(name: String) = Action.async {
     (helloActor ? SayHello(name)).mapTo[String].map { message =>
