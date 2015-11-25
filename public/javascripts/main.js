@@ -22,6 +22,8 @@ myApp.controller('MainCtrl', function ($scope) {
 myApp.factory('MyData', function ($websocket) {
         // Open a WebSocket connection
         var dataStream = $websocket('wss://localhost:9000/socket');
+        //This works
+        //var dataStream = $websocket('wss://echo.websocket.org/');
 
         var collection = [];
 
@@ -32,7 +34,7 @@ myApp.factory('MyData', function ($websocket) {
         var methods = {
             collection: collection,
             get: function () {
-                dataStream.send(JSON.stringify({action: 'get'}));
+                dataStream.send(JSON.stringify({foo: 'bar'}));
             }
         };
 
@@ -41,4 +43,6 @@ myApp.factory('MyData', function ($websocket) {
     .controller('SomeController', function ($scope, MyData) {
         $scope.MyData = MyData;
         $scope.testData = "asdf"
+
+        MyData.get();
     });
