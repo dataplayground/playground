@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" ng-app="myApp">
 	<head>
 		<meta charset="utf-8">
 		<title>My AngularJS App</title>
@@ -8,17 +8,45 @@
 		<link rel="stylesheet" href="@routes.Assets.versioned("lib/bootstrap/css/bootstrap.css")">
 		<script type='text/javascript' src='@routes.Assets.versioned("lib/jquery/jquery.js")'></script>
 		<script type='text/javascript' src='@routes.Assets.versioned("lib/bootstrap/js/bootstrap.js")'></script>
-		@*<script type='text/javascript' src='@routes.Assets.versioned("lib/angular-ui-bootstrap/ui-bootstrap.js")'></script>*@
+		<script type='text/javascript' src='@routes.Assets.versioned("lib/angularjs/angular.js")'></script>
+		<script type='text/javascript' src='@routes.Assets.versioned("lib/angular-ui-bootstrap/ui-bootstrap.js")'></script>
+		<script type='text/javascript' src='@routes.Assets.versioned("lib/angular-websocket/angular-websocket.js")'></script>
+		<script type="text/javascript" src="@routes.Assets.versioned("javascripts/main.js")"></script>
 	</head>
-	<body>
+	<body ng-controller="MainCtrl as main">
 		<ul class="menu">
-			<li><a href="#/view1">view1</a></li>
-			<li><a href="#/view2">view2</a></li>
+			<li><p>Nothing here {{'yet' + '!'}}</p></li>
 		</ul>
+		<div>
+			<p>Searching for</p>
+			<p>{{list}}</p>
+			<p>Results Stream</p>
+			<ul>
+				<li ng-repeat="data in filter.result">
+        {{ data }}
+				</li>
+			</ul>
+		</div>
 
-		<div ng-view></div>
+		<form name="filterForm" ng-submit="submit()" novalidate> <!-- novalidate prevents HTML5 validation since we will be validating ourselves -->
 
-		<div>Angular seed app: v<span app-version></span></div>
+			<!-- Keyword -->
+			<div class="form-group">
+				<label>Filter Keywoard</label>
+				<input type="text" name="text" class="form-control" ng-model="filterForm.keyword" required>
+			</div>
+
+				<!-- SUBMIT BUTTON -->
+			<button type="submit" class="btn btn-primary">Submit</button>
+
+		</form>
+		<div ng-controller="SomeController">
+			<ul>
+				<li ng-repeat="data in MyData.collection track by $index">
+                {{ data }}
+				</li>
+			</ul>
+		</div>
 
 	</body>
 </html>
