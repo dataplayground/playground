@@ -11,7 +11,6 @@ import play.api.mvc._
 
 import scala.concurrent.duration._
 
-
 //using plays own actor system
 @Singleton
 class Application @Inject()(system: ActorSystem) extends Controller {

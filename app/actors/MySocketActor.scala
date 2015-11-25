@@ -1,6 +1,6 @@
 package actors
 
-import akka.actor.{Actor, ActorRef, Props}
+import akka.actor.{ Actor, ActorRef, Props }
 
 object MyWebSocketActor {
   def props(out: ActorRef) = Props(new MyWebSocketActor(out))
