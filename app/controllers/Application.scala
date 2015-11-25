@@ -34,4 +34,8 @@ class Application @Inject()(system: ActorSystem) extends Controller {
     MyWebSocketActor.props(out)
   }
 
+  def appNg = Action {
+    Ok(views.html.app())
+  }
+
 }
