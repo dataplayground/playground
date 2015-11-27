@@ -1,5 +1,5 @@
 <configuration>
-    
+
   <conversionRule conversionWord="coloredLevel" converterClass="play.api.Logger$ColoredLevel" />
 
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
@@ -14,6 +14,14 @@
   -->
   <logger name="play" level="INFO" />
   <logger name="application" level="DEBUG" />
+
+  <logger name="org.apache.spark" level="WARN" />
+  <logger name="org.apache.spark.storage.BlockManager" level="ERROR" />
+
+  <logger name="org.apache.zookeeper" level="ERROR"/>
+  <logger name="kafka" level="ERROR" />
+
+  <logger name="org.apache.kafka" level="ERROR" />
 
   <root level="ERROR">
     <appender-ref ref="STDOUT" />
