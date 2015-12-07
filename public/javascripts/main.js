@@ -1,24 +1,5 @@
 var myApp = angular.module('myApp', ['ngWebSocket']);
 
-myApp.controller('MainCtrl', function ($scope) {
-
-    $scope.list = [];
-    $scope.text = 'spark';
-
-
-    $scope.filterForm = {};
-    $scope.filterForm.keyword = "spark";
-
-    $scope.submit = function () {
-        if ($scope.filterForm.keyword) {
-            $scope.list.push(this.filterForm.keyword);
-            $scope.filterForm.keyword = '';
-        }
-    };
-
-
-});
-
 myApp.factory('MyData', function ($websocket) {
         // Open a WebSocket connection
         var dataStream = $websocket('ws://localhost:9000/socket');
@@ -31,16 +12,34 @@ myApp.factory('MyData', function ($websocket) {
 
         var methods = {
             collection: collection,
-            get: function () {
-                dataStream.send(JSON.stringify({foo: 'bar'}));
+            get: function (searchParam) {
+                dataStream.send(JSON.stringify({foo: searchParam}));
             }
         };
 
         return methods;
     })
     .controller('SomeController', function ($scope, MyData) {
-        $scope.MyData = MyData;
-        $scope.testData = "asdf"
-
-        MyData.get();
+    //TODO how to get rid of this without an error?
     });
+
+
+myApp.controller('MainCtrl', function ($scope, MyData) {
+
+    $scope.list = [];
+    $scope.text = 'spark';
+
+    $scope.MyData = MyData;
+
+    $scope.filterForm = {};
+    $scope.filterForm.keyword = "spark";
+
+    $scope.submit = function () {
+        if ($scope.filterForm.keyword) {
+            $scope.list.push(this.filterForm.keyword);
+            //TODO make dynamic
+            MyData.get(this.filterForm.keyword);
+            $scope.filterForm.keyword = '';
+        }
+    };
+});
