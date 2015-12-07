@@ -9,8 +9,9 @@ import akka.pattern.ask
 import org.apache.spark.streaming.{ Seconds, StreamingContext }
 import org.apache.spark.{ SparkConf, SparkContext }
 import org.slf4j.LoggerFactory
+import play.api.libs.json.JsValue
 import play.api.mvc._
-
+import play.api.Logger
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 
@@ -21,26 +22,26 @@ class Application @Inject() (system: ActorSystem) extends Controller {
   val helloActor = system.actorOf(HelloActor.props, "hello-actor")
   implicit val timeout = akka.util.Timeout(5.seconds)
   implicit val app = play.api.Play.current
-  val logger = LoggerFactory.getLogger(this.getClass)
+  //  val logger = LoggerFactory.getLogger(this.getClass)
+  //
+  //  val sparkConf = new SparkConf()
+  //    .setMaster("local[*]")
+  //    .setAppName("playground")
+  //    .set("spark.akka.heartbeat.interval", "100")
+  //    .set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
+  //    .set("spark.broadcast.factory", "org.apache.spark.broadcast.HttpBroadcastFactory")
+  //    .set("spark.streaming.backpressure.enabled", "true")
+  //    .set("spark.executorEnv.kafkaBootstrapServers", "192.168.99.100:9092")
+  //    .set("spark.executorEnv.kafkaProducerKeySerializer", "org.apache.kafka.common.serialization.StringSerializer")
+  //    .set("spark.executorEnv.kafkaProducerValueSerializer", "org.apache.kafka.common.serialization.StringSerializer")
 
-  val sparkConf = new SparkConf()
-    .setMaster("local[*]")
-    .setAppName("playground")
-    .set("spark.akka.heartbeat.interval", "100")
-    .set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
-    .set("spark.broadcast.factory", "org.apache.spark.broadcast.HttpBroadcastFactory")
-    .set("spark.streaming.backpressure.enabled", "true")
-    .set("spark.executorEnv.kafkaBootstrapServers", "192.168.99.100:9092")
-    .set("spark.executorEnv.kafkaProducerKeySerializer", "org.apache.kafka.common.serialization.StringSerializer")
-    .set("spark.executorEnv.kafkaProducerValueSerializer", "org.apache.kafka.common.serialization.StringSerializer")
-
-  val sparkContext = createSparkContext
-  val ssc: StreamingContext = createStreamingContext(sparkContext)
-
-  def createSparkContext: SparkContext = new SparkContext(sparkConf)
-
-  def createStreamingContext(sparkContext: SparkContext): StreamingContext =
-    new StreamingContext(sparkContext = sparkContext, batchDuration = Seconds(2))
+  //  val sparkContext = createSparkContext
+  //  val ssc: StreamingContext = createStreamingContext(sparkContext)
+  //
+  //  def createSparkContext: SparkContext = new SparkContext(sparkConf)
+  //
+  //  def createStreamingContext(sparkContext: SparkContext): StreamingContext =
+  //    new StreamingContext(sparkContext = sparkContext, batchDuration = Seconds(2))
 
   def index = Action {
     Ok(views.html.index("Your new application is ready."))
@@ -52,7 +53,8 @@ class Application @Inject() (system: ActorSystem) extends Controller {
     }
   }
 
-  def socket = WebSocket.acceptWithActor[String, String] { request => out =>
+  def socket = WebSocket.acceptWithActor[JsValue, JsValue] { request => out =>
+    Logger.debug("received socket something  " + out)
     MyWebSocketActor.props(out)
   }
 
@@ -60,10 +62,9 @@ class Application @Inject() (system: ActorSystem) extends Controller {
     Ok(views.html.app())
   }
 
-  def directStreaming = WebSocket.acceptWithActor[String, String] { request => out =>
-    DirectStreamingActor.props(out, ssc)
-
-  }
+  //  def directStreaming = WebSocket.acceptWithActor[JsValue, JsValue] { request => out =>
+  //    DirectStreamingActor.props(out, ssc)
+  //  }
 
   //  def trendingTopics = WebSocket.acceptWithActor[String, String] { request => out =>
   //    TrendingTopicsActor.props(out)

@@ -21,9 +21,7 @@ myApp.controller('MainCtrl', function ($scope) {
 
 myApp.factory('MyData', function ($websocket) {
         // Open a WebSocket connection
-        var dataStream = $websocket('wss://localhost:9000/socket');
-        //This works
-        //var dataStream = $websocket('wss://echo.websocket.org/');
+        var dataStream = $websocket('ws://localhost:9000/socket');
 
         var collection = [];
 
