@@ -37,7 +37,6 @@ myApp.controller('MainCtrl', function ($scope, MyData) {
     $scope.submit = function () {
         if ($scope.filterForm.keyword) {
             $scope.list.push(this.filterForm.keyword);
-            //TODO make dynamic
             MyData.get(this.filterForm.keyword);
             $scope.filterForm.keyword = '';
         }
