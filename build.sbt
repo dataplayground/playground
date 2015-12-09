@@ -10,7 +10,7 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
 scalaVersion := "2.11.7"
 // TODO update to latest version
-val sparkVersion = "1.5.1"
+val sparkVersion = "1.5.2"
 
 libraryDependencies ++= Seq(
   jdbc,

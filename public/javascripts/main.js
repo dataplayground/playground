@@ -2,7 +2,7 @@ var myApp = angular.module('myApp', ['ngWebSocket']);
 
 myApp.factory('MyData', function ($websocket) {
         // Open a WebSocket connection
-        var dataStream = $websocket('ws://localhost:9000/socket');
+        var dataStream = $websocket('ws://localhost:9000/direct');
 
         var collection = [];
 

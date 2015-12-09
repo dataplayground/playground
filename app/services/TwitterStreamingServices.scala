@@ -10,7 +10,7 @@ import org.apache.spark.storage.StorageLevel
 import org.apache.spark.streaming.dstream.DStream
 import org.apache.spark.streaming.{ Duration, StreamingContext }
 import org.slf4j.LoggerFactory
-import play.Play
+import play.{ Logger, Play }
 import services.domain.{ TweetsByDay, TweetsByTrack }
 import twitter4j.Status
 import twitter4j.auth.OAuthAuthorization
@@ -23,7 +23,7 @@ trait TwitterStreamingService extends Serializable {
 
   def createTwitterStream(
     filters: Seq[String] = Seq.empty,
-    storageLevel: StorageLevel = StorageLevel.MEMORY_AND_DISK_SER
+    storageLevel: StorageLevel = StorageLevel.MEMORY_ONLY
   )(implicit ssc: StreamingContext) = {
     val authorization = new OAuthAuthorization(new ConfigurationBuilder()
       .setOAuthConsumerKey(Play.application().configuration().getString("twitter.consumerKey"))
@@ -31,6 +31,8 @@ trait TwitterStreamingService extends Serializable {
       .setOAuthAccessToken(Play.application().configuration().getString("twitter.accessToken"))
       .setOAuthAccessTokenSecret(Play.application().configuration().getString("twitter.accessTokenSecret"))
       .build())
+
+    Logger.debug("consumer key" + Play.application().configuration().getString("twitter.consumerKey"))
 
     ssc.actorStream[Status](
       Props(
